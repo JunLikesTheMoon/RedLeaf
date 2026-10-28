@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Redleaf – Your life, one page at a time</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--red:#A52A36;--bur:#6F1D2A;--rose:#C96B76;--blush:#F2D9DC;--bg:#FFF8F0;--paper:#FFFCF8;--ink:#302426;--mut:#6f5f60;--line:#e6d3cf;--acc:var(--red);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+:root[data-t=rose]{--acc:#C96B76;--bg:#FDF1F2}:root[data-t=cherry]{--acc:#C8102E;--bur:#8f0c20}:root[data-t=cream]{--bg:#FBF1E1;--blush:#EBC9CC}
+:root[data-t=dark]{--bg:#2a1519;--paper:#37201f;--ink:#f6e8e4;--mut:#c9aeb0;--line:#5a3a3d;--acc:#d9626f;--blush:#4a2a2f;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,sans-serif}
+h1,h2,h3,.serif{font-family:Lora,Georgia,serif;font-weight:600}
+.paper body::before{content:""}
+#app{display:grid;grid-template-columns:200px 1fr;min-height:100vh}
+nav{background:var(--bur);color:#FFF8F0;padding:20px 12px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:4px}
+nav .logo{font:600 24px Lora,serif;padding:0 10px 16px}
+nav button{all:unset;cursor:pointer;padding:10px 12px;border-radius:8px;color:#f2d9dc}
+nav button:hover,nav button[aria-current=page]{background:rgba(255,255,255,.14);color:#fff}
+main{padding:24px;max-width:1000px;width:100%}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+.top{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px}.top .grow{flex:1;min-width:180px}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:999px;padding:10px 18px;font:500 15px Inter;cursor:pointer;min-height:44px}
+.btn.ghost{background:transparent;color:var(--acc);border:1px solid var(--acc)}.btn.sm{padding:6px 12px;min-height:36px}.btn.danger{background:#8f1d1d}
+.btn:hover{filter:brightness(1.1)}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px;width:100%}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:20px}
+.bk{cursor:pointer;background:none;border:0;text-align:left;color:inherit;padding:0;font:inherit}
+.cover{aspect-ratio:3/4;border-radius:4px 10px 10px 4px;box-shadow:inset 6px 0 8px -4px rgba(0,0,0,.35),2px 4px 10px rgba(0,0,0,.25);padding:14px 12px 14px 18px;display:flex;flex-direction:column;justify-content:center;gap:6px;overflow:hidden;transition:transform .2s}
+.bk:hover .cover{transform:translateY(-4px)}.cover b{font-size:17px;line-height:1.2;word-break:break-word}.cover small{opacity:.85}
+.meta{font-size:13px;color:var(--mut);margin-top:6px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:block;width:100%;text-align:left;color:inherit;font:inherit}
+.card:hover{border-color:var(--rose);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.tag{display:inline-block;background:var(--blush);color:var(--bur);border-radius:99px;padding:1px 10px;font-size:12px;margin:2px 4px 0 0}
+:root[data-t=dark] .tag{color:#f6e8e4}
+.sample{font-size:11px;border:1px dashed var(--mut);border-radius:4px;padding:0 5px;color:var(--mut)}
+.page{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:32px;box-shadow:0 6px 20px rgba(0,0,0,.1);background-image:linear-gradient(transparent 31px,var(--line) 32px);background-size:100% 32px}
+.paperoff .page{background-image:none}
+.page .body{white-space:pre-wrap;font:18px/32px Lora,serif}
+.photo{background:#fff;padding:8px 8px 22px;box-shadow:0 3px 10px rgba(0,0,0,.25);transform:rotate(-1.5deg);display:inline-block;max-width:100%}
+.photo img{display:block;max-width:100%;max-height:360px}
+.side{display:flex;gap:20px;flex-wrap:wrap}
+dialog{border:0;border-radius:12px;background:var(--bg);color:var(--ink);padding:22px;width:min(640px,94vw);max-height:92vh}dialog::backdrop{background:rgba(48,36,38,.55)}
+.picker{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:10px}
+.picker label{margin:0;cursor:pointer;text-align:center;font-size:11px;color:var(--ink)}.picker input{position:absolute;opacity:0;width:1px}
+.picker .cover{padding:6px;font-size:9px;border:3px solid transparent}.picker input:checked+.cover,.picker input:focus-visible+.cover{border-color:var(--acc)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row>*{flex:1;min-width:120px}.row .btn{flex:none}
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bur);color:#fff;padding:10px 18px;border-radius:99px;display:none;z-index:99}
+.empty{text-align:center;color:var(--mut);padding:30px}
+@media(max-width:700px){#app{grid-template-columns:1fr}nav{position:fixed;bottom:0;left:0;right:0;top:auto;height:auto;flex-direction:row;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));z-index:50}nav .logo{display:none}nav button{padding:10px 6px;font-size:13px}main{padding:16px 16px 90px}.page{padding:20px}}
+</style></head><body>
+<div id="app"><nav aria-label="Main"></nav><main id="main"></main></div>
+<dialog id="dlg"></dialog><div id="toast" role="status"></div>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let S,V={v:'home',id:null,q:'',f:'all',tag:'',bk:'',sort:'new'};
+const uid=()=>Math.random().toString(36).slice(2,10),now=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)};
+const DES=[['hard','Red hardcover'],['leather','Burgundy leather'],['minimal','Cream &amp; red'],['gingham','Gingham'],['floral','Rose pattern'],['lined','Lined notebook'],['dark','Dark academia'],['type','Typography']];
+const FONTS={serif:'Lora,serif',sans:'Inter,sans-serif',script:'"Brush Script MT",cursive'};
+/* storage */
+const idb=()=>new Promise((res,rej)=>{const r=indexedDB.open('redleaf',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+async function load(){try{const d=await idb();return await new Promise(res=>{const q=d.transaction('kv').objectStore('kv').get('s');q.onsuccess=()=>res(q.result);q.onerror=()=>res()})}catch(e){return}}
+async function save(){try{const d=await idb();await new Promise((res,rej)=>{const t=d.transaction('kv','readwrite');t.objectStore('kv').put(S,'s');t.oncomplete=res;t.onerror=()=>rej(t.error)})}catch(e){toast('Could not save: '+e.message)}}
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',2800)}
+function seed(){const b=(t,s,d,c,des)=>({id:uid(),title:t,sub:s,desc:'',design:des,color:c,textColor:'#FFF8F0',font:'serif',align:'center',sample:1});
+const bs=[b('Daily Life','Small moments','','#A52A36','hard'),b('Travel Journal','Roads &amp; rain'.replace('&amp;','&'),'','#6F1D2A','leather'),b('Gratitude','Little things','','#FFF8F0','minimal')];bs[2].textColor='#6F1D2A';
+const n=(i,t,c,tags,fav,day)=>({id:uid(),book:bs[i].id,title:t,content:c,date:day,tags,fav,photo:null,pos:'above',sample:1});
+return{books:bs,notes:[n(0,'A slow Sunday','Woke up late, made coffee, and **finally** read the book I’d been saving. The rain made everything feel softer.',['happy'],1,'2026-10-25T09:30'),n(1,'Notes from the train','Window seat, a thermos of tea, and fields going by. I want to remember how quiet it felt.',['travel'],0,'2026-10-20T14:10'),n(2,'Three good things','1. A warm scarf\n2. A call from an old friend\n3. Soup that turned out right',['family'],1,'2026-10-27T21:00'),n(0,'Welcome to Redleaf','This is a *sample* note. Edit or delete it, then start your own pages. Everything is stored only in this browser.',[],0,'2026-10-28T08:00')],settings:{theme:'burgundy',sort:'new',defBook:'',size:100,paper:1}}}
+/* covers */
+function cover(b,mini){let bg=b.color,x='';const c=b.color;
+if(b.img)bg=`url(${b.img}) center/${b.fit||'cover'} no-repeat ${c}`;else switch(b.design){
+case'leather':bg=`radial-gradient(circle at 30% 20%,rgba(255,255,255,.12),transparent 60%),${c}`;x='box-shadow:inset 0 0 0 6px rgba(0,0,0,.2),inset 6px 0 8px -4px rgba(0,0,0,.35)';break;
+case'minimal':bg=`linear-gradient(90deg,transparent 80%,#A52A36 80%),${c}`;break;
+case'gingham':bg=`repeating-linear-gradient(0deg,rgba(255,255,255,.3) 0 10px,transparent 10px 20px),repeating-linear-gradient(90deg,rgba(255,255,255,.3) 0 10px,transparent 10px 20px),${c}`;break;
+case'floral':bg=`radial-gradient(circle,#F2D9DC 3px,transparent 4px) 0 0/22px 22px,radial-gradient(circle,rgba(255,255,255,.25) 6px,transparent 7px) 11px 11px/22px 22px,${c}`;break;
+case'lined':bg=`repeating-linear-gradient(transparent 0 19px,rgba(0,0,0,.15) 19px 20px),${c}`;break;
+case'dark':bg=`linear-gradient(#2a1519,#2a1519) padding-box,${c}`;x='border:3px double #c9a96a';break;
+case'type':bg=c;break}
+return`<div class="cover" style="background:${bg};color:${b.textColor};font-family:${FONTS[b.font]};text-align:${b.align};${x}"><b>${esc(b.title)||'Untitled'}</b>${b.sub&&!mini?`<small>${esc(b.sub)}</small>`:''}</div>`}
+const bookOf=id=>S.books.find(b=>b.id==id),fmt=d=>d?new Date(d).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}):'—';
+const notesOf=id=>S.notes.filter(n=>n.book==id);
+const rich=t=>esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\*(.+?)\*/g,'<i>$1</i>');
+/* views */
+function noteCard(n){const b=bookOf(n.book);return`<button class="card" data-a="note" data-id="${n.id}"><div class="row" style="justify-content:space-between"><h3 style="margin:0;flex:1">${n.fav?'♥ ':''}${esc(n.title)||'Untitled'} ${n.sample?'<span class="sample">sample</span>':''}</h3><span class="meta" style="flex:none">${fmt(n.date)}</span></div><div class="meta">${b?esc(b.title):'Unsorted'}${n.photo?' · 📷':''}</div><div>${esc(n.content).slice(0,110)}${n.content.length>110?'…':''}</div>${n.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</button>`}
+const bookCard=b=>`<button class="bk" data-a="book" data-id="${b.id}" aria-label="Open ${esc(b.title)}">${cover(b)}<div class="meta">${notesOf(b.id).length} notes · last ${fmt(notesOf(b.id).map(n=>n.date).sort().pop())} ${b.sample?'<span class="sample">sample</span>':''}</div></button>`;
+const sortN=(a,m)=>[...a].sort((x,y)=>m=='old'?x.date.localeCompare(y.date):m=='az'?x.title.localeCompare(y.title):y.date.localeCompare(x.date));
+function filtered(){let a=S.notes;const q=V.q.toLowerCase();
+if(q)a=a.filter(n=>[n.title,n.content,bookOf(n.book)?.title,...n.tags].join(' ').toLowerCase().includes(q));
+if(V.f=='recent')a=a.filter(n=>Date.now()-new Date(n.date)<14*864e5);if(V.f=='fav')a=a.filter(n=>n.fav);if(V.f=='photo')a=a.filter(n=>n.photo);if(V.f=='text')a=a.filter(n=>!n.photo);
+if(V.bk)a=a.filter(n=>n.book==V.bk);if(V.tag)a=a.filter(n=>n.tags.includes(V.tag));return sortN(a,V.sort)}
+function header(title,extra=''){return`<div class="top"><div class="grow"><h1 style="margin:0">${title}</h1><div class="meta">${new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div></div><input class="grow" id="q" type="search" placeholder="Search notes, books, tags…" aria-label="Search" value="${esc(V.q)}" style="max-width:260px">${extra}<button class="btn" data-a="newnote">+ New Note</button></div>`}
+function notesList(a){return a.length?a.map(noteCard).join(''):'<div class="empty">No notes here yet.</div>'}
+function filters(){const tags=[...new Set(S.notes.flatMap(n=>n.tags))];const o=(v,l,c)=>`<option value="${v}" ${c==v?'selected':''}>${l}</option>`;
+return`<div class="row" style="margin-bottom:14px"><select data-s="f" aria-label="Filter">${o('all','All notes',V.f)+o('recent','Recent',V.f)+o('fav','Favorites',V.f)+o('photo','With photos',V.f)+o('text','Text only',V.f)}</select><select data-s="bk" aria-label="Book"><option value="">Any book</option>${S.books.map(b=>o(b.id,esc(b.title),V.bk)).join('')}</select><select data-s="tag" aria-label="Tag"><option value="">Any tag</option>${tags.map(t=>o(esc(t),esc(t),V.tag)).join('')}</select><select data-s="sort" aria-label="Sort">${o('new','Newest',V.sort)+o('old','Oldest',V.sort)+o('az','A–Z',V.sort)}</select></div>`}
+function render(){const v=V.v,m=$('#main');let h='';
+const navs=[['home','Home'],['books','Books'],['notes','Notes'],['fav','Favorites'],['settings','Settings']];
+$('nav').innerHTML='<div class="logo">Redleaf</div>'+navs.map(([k,l])=>`<button data-a="nav" data-id="${k}" ${(v==k||(v=='book'&&k=='books'))?'aria-current="page"':''}>${l}</button>`).join('');
+if(v=='home'){const rec=sortN(S.notes,'new').slice(0,4),fav=S.notes.filter(n=>n.fav).slice(0,3),un=S.notes.filter(n=>!bookOf(n.book));
+h=header('My Library')+`<p class="serif" style="font-size:20px;font-style:italic;margin-top:-8px">Your life, one page at a time.</p>`+(V.q?`<h2>Results</h2>${notesList(filtered())}`:`<div class="grid">${S.books.map(bookCard).join('')}<button class="bk" data-a="newbook" aria-label="New book"><div class="cover" style="border:2px dashed var(--rose);box-shadow:none;align-items:center;font-size:36px;color:var(--rose)">+</div><div class="meta">New book</div></button></div><h2>Recent Notes</h2>${notesList(rec)}<h2>Favorites</h2>${notesList(fav)}${un.length?`<h2>Unsorted Notes</h2>${notesList(un)}`:''}`)}
+else if(v=='books')h=header('My Books')+`<div class="grid">${S.books.map(bookCard).join('')}</div><p><button class="btn ghost" data-a="newbook">+ New Book</button></p>`;
+else if(v=='book'){const b=bookOf(V.id);if(!b){V.v='home';return render()}const q=V.q.toLowerCase();let a=notesOf(b.id).filter(n=>!q||(n.title+n.content+n.tags).toLowerCase().includes(q));a=sortN(a,V.sort);
+h=header(esc(b.title))+`<div class="side"><div style="width:150px">${cover(b)}</div><div style="flex:1;min-width:200px"><p class="meta">${esc(b.sub)} ${esc(b.desc)}</p><div class="row"><button class="btn sm ghost" data-a="editbook" data-id="${b.id}">Edit book</button><button class="btn sm ghost" data-a="mv" data-id="${b.id}" data-d="-1">← Move</button><button class="btn sm ghost" data-a="mv" data-id="${b.id}" data-d="1">Move →</button><button class="btn sm danger" data-a="delbook" data-id="${b.id}">Delete</button></div><div class="row" style="margin-top:10px"><select data-s="sort" aria-label="Sort">${[['new','Newest'],['old','Oldest'],['az','Title']].map(([k,l])=>`<option value="${k}" ${V.sort==k?'selected':''}>${l}</option>`).join('')}</select></div></div></div><h2>Notes</h2>${notesList(a)}`}
+else if(v=='notes')h=header('All Notes')+filters()+notesList(filtered());
+else if(v=='fav')h=header('Favorites')+notesList(sortN(S.notes.filter(n=>n.fav&&(!V.q||(n.title+n.content).toLowerCase().includes(V.q.toLowerCase()))),'new'));
+else if(v=='read'){const n=S.notes.find(x=>x.id==V.id);if(!n){V.v='home';return render()}const b=bookOf(n.book);
+const ph=n.photo?`<div class="photo"><img src="${n.photo}" alt="Photo attached to ${esc(n.title)}"></div>`:'';
+h=`<div class="top"><button class="btn ghost sm" data-a="${b?'book':'nav'}" data-id="${b?b.id:'home'}">← Back to ${b?esc(b.title):'Home'}</button><span class="grow"></span><button class="btn sm ghost" data-a="fav" data-id="${n.id}" aria-pressed="${!!n.fav}">${n.fav?'♥ Favorite':'♡ Favorite'}</button><button class="btn sm" data-a="editnote" data-id="${n.id}">Edit</button><button class="btn sm danger" data-a="delnote" data-id="${n.id}">Delete</button></div><article class="page"><div class="meta">${b?esc(b.title):'Unsorted'} · ${new Date(n.date).toLocaleString()}</div><h1>${esc(n.title)||'Untitled'}</h1>${n.photo&&n.pos=='above'?ph:''}<div class="body">${rich(n.content)}</div>${n.photo&&n.pos!='above'?`<p>${ph}</p>`:''}<p>${n.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</p></article>`}
+else if(v=='settings'){const s=S.settings,o=(v,l,c)=>`<option value="${v}" ${c==v?'selected':''}>${l}</option>`;
+h=`<h1>Settings</h1><label for="s1">Theme</label><select id="s1" data-set="theme">${[['burgundy','Classic Burgundy'],['rose','Soft Rose'],['cherry','Cherry Red'],['cream','Cream and Crimson'],['dark','Dark Burgundy']].map(([k,l])=>o(k,l,s.theme)).join('')}</select><label for="s2">Default book for new notes</label><select id="s2" data-set="defBook"><option value="">None</option>${S.books.map(b=>o(b.id,esc(b.title),s.defBook)).join('')}</select><label for="s3">Default sort</label><select id="s3" data-set="sort">${o('new','Newest',s.sort)+o('old','Oldest',s.sort)+o('az','A–Z',s.sort)}</select><label for="s4">Font size (${s.size}%)</label><input id="s4" type="range" min="85" max="130" value="${s.size}" data-set="size"><label><input type="checkbox" style="width:auto" data-set="paper" ${s.paper?'checked':''}> Show paper lines on pages</label><h2>Your data</h2><p class="meta">Everything is stored locally in this browser (IndexedDB). It does not sync between devices and is not a cloud backup, so export regularly. The JSON backup includes your photos and covers.</p><div class="row"><button class="btn" data-a="export">Export backup (JSON)</button><button class="btn ghost" data-a="import">Import backup</button><button class="btn danger" data-a="clear">Clear all data</button></div><input type="file" id="imp" accept=".json" hidden>`}
+m.innerHTML=h;document.documentElement.dataset.t=S.settings.theme;document.documentElement.style.fontSize=S.settings.size+'%';document.documentElement.classList.toggle('paperoff',!S.settings.paper);
+const q=$('#q');if(q)q.oninput=()=>{V.q=q.value;if(V.q&&V.v=='books')V.v='home';const p=q.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(p,p)}}
+/* dialogs */
+const dlg=$('#dlg');
+function modal(h){dlg.innerHTML=h;dlg.showModal()}
+function confirmBox(msg,ok='Delete'){return new Promise(r=>{modal(`<h2>${msg}</h2><div class="row" style="justify-content:flex-end"><button class="btn ghost" value="n">Cancel</button><button class="btn danger" value="y">${ok}</button></div>`);dlg.onclick=e=>{const v=e.target.value;if(v){dlg.close();dlg.onclick=null;r(v=='y')}};dlg.oncancel=()=>r(false)})}
+const shrink=f=>new Promise(res=>{if(!f)return res(null);const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,1400/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.85))};i.onerror=()=>{toast('Could not read that image');res(null)};i.src=r.result};r.readAsDataURL(f)});
+function bookForm(id){const nb=!id,b=id?{...bookOf(id)}:{id:uid(),title:'',sub:'',desc:'',design:'hard',color:'#A52A36',textColor:'#FFF8F0',font:'serif',align:'center',fit:'cover'};
+const o=(v,l,c)=>`<option value="${v}" ${c==v?'selected':''}>${l}</option>`;
+const draw=()=>{$('#pv').innerHTML=cover(b);$('#gal').innerHTML=DES.map(([k,l])=>`<label><input type="radio" name="des" value="${k}" ${!b.img&&b.design==k?'checked':''}>${cover({...b,img:null,design:k,title:l.replace('&amp;','&')},1)}</label>`).join('')};
+modal(`<form method="dialog" id="bf"><h2>${nb?'New book':'Edit book'}</h2><div class="side"><div style="width:130px" id="pv"></div><div style="flex:1;min-width:200px"><label for="bt">Title</label><input id="bt" value="${esc(b.title)}" required><label for="bs">Subtitle</label><input id="bs" value="${esc(b.sub)}"><label for="bd">Description</label><input id="bd" value="${esc(b.desc)}"></div></div><label>Cover design</label><div class="picker" id="gal"></div><div class="row"><div><label for="bc">Cover colour</label><input id="bc" type="color" value="${b.color}"></div><div><label for="bx">Text colour</label><input id="bx" type="color" value="${b.textColor}"></div><div><label for="bfo">Font</label><select id="bfo">${o('serif','Serif',b.font)+o('sans','Sans',b.font)+o('script','Script',b.font)}</select></div><div><label for="ba">Align</label><select id="ba">${o('left','Left',b.align)+o('center','Centre',b.align)+o('right','Right',b.align)}</select></div></div><label for="bi">Upload your own cover (JPG, PNG, WebP)</label><div class="row"><input id="bi" type="file" accept="image/jpeg,image/png,image/webp"><select id="bfit" aria-label="Image fit">${o('cover','Fill (cover)',b.fit)+o('contain','Fit (contain)',b.fit)}</select><button type="button" class="btn sm ghost" id="brm">Remove image</button></div><div class="row" style="justify-content:flex-end;margin-top:16px"><button type="button" class="btn ghost" id="bcx">Cancel</button><button class="btn" id="bsv">Save book</button></div></form>`);
+const rd=()=>{b.title=$('#bt').value;b.sub=$('#bs').value;b.desc=$('#bd').value;b.color=$('#bc').value;b.textColor=$('#bx').value;b.font=$('#bfo').value;b.align=$('#ba').value;b.fit=$('#bfit').value;draw()};
+draw();const f=$('#bf');f.oninput=e=>{if(e.target.name=='des'){b.design=e.target.value;b.img=null}rd()};
+$('#bi').onchange=async e=>{b.img=await shrink(e.target.files[0]);rd()};$('#brm').onclick=()=>{b.img=null;draw()};$('#bcx').onclick=()=>{dlg.close();if(window._afterBook){const f=window._afterBook;window._afterBook=null;f(window._draft?.book||'')}};
+f.onsubmit=async e=>{rd();b.sample=0;if(nb)S.books.push(b);else Object.assign(bookOf(id),b);await save();if(window._afterBook){window._afterBook(b.id);window._afterBook=null}else render();toast('Book saved')}}
+function noteForm(id,bk){let dirty=0;const ed=id?S.notes.find(n=>n.id==id):null,n=ed?{...ed}:{id:uid(),book:bk||S.settings.defBook||'',title:'',content:'',date:now(),tags:[],fav:0,photo:null,pos:'above'};if(window._draft){Object.assign(n,window._draft);if(bk)n.book=bk;dirty=1;window._draft=null}
+const draw=()=>{const bs=S.books.map(b=>`<label><input type="radio" name="bk" value="${b.id}" ${n.book==b.id?'checked':''}>${cover(b,1)}${esc(b.title)}</label>`).join('')+`<label><input type="radio" name="bk" value="" ${!n.book?'checked':''}><div class="cover" style="border:2px dashed var(--rose);box-shadow:none;align-items:center">∅</div>Unsorted</label><label><button type="button" id="nb" style="all:unset;cursor:pointer"><div class="cover" style="border:2px dashed var(--rose);box-shadow:none;align-items:center;font-size:24px">+</div>New</button></label>`;$('#bp').innerHTML=bs;
+$('#pp').innerHTML=n.photo?`<div class="photo"><img src="${n.photo}" alt="Preview of attached photo"></div> <button type="button" class="btn sm ghost" id="rp">Remove photo</button>`:''};
+modal(`<form method="dialog" id="nf"><h2>${ed?'Edit note':'New note'}</h2><label for="nt">Title</label><input id="nt" value="${esc(n.title)}" required><label for="nd">Date and time</label><input id="nd" type="datetime-local" value="${n.date}"><label>Book</label><div class="picker" id="bp"></div><label for="nc">Write</label><textarea id="nc" rows="9" style="font:17px/1.6 Lora,serif" placeholder="Dear diary… (use *italic* and **bold**)">${esc(n.content)}</textarea><div class="row" style="margin-top:8px"><label style="margin:0;flex:none" class="btn sm ghost" for="np" tabindex="0">+ Add Photo (optional)</label><input id="np" type="file" accept="image/jpeg,image/png,image/webp" hidden><select id="npos" aria-label="Photo position"><option value="above">Photo above text</option><option value="below">Photo below text</option></select></div><div id="pp"></div><label for="ntg">Tags (comma separated)</label><input id="ntg" value="${esc(n.tags.join(', '))}"><label style="color:var(--ink)"><input type="checkbox" id="nfv" style="width:auto" ${n.fav?'checked':''}> Mark as favorite</label><div class="row" style="justify-content:flex-end;margin-top:14px"><button type="button" class="btn ghost" id="ncx">Cancel</button><button class="btn">Save note</button></div></form>`);
+$('#npos').value=n.pos;draw();const f=$('#nf');f.oninput=()=>dirty=1;
+f.addEventListener('change',e=>{if(e.target.name=='bk')n.book=e.target.value});
+f.onclick=async e=>{if(e.target.closest('#nb')){window._draft={title:$('#nt').value,content:$('#nc').value,date:$('#nd').value,tags:$('#ntg').value.split(',').map(t=>t.trim()).filter(Boolean),fav:$('#nfv').checked?1:0,photo:n.photo,pos:$('#npos').value,book:n.book};window._afterBook=i=>noteForm(id,i);bookForm()}if(e.target.id=='rp'){n.photo=null;dirty=1;draw()}};
+$('#np').onchange=async e=>{n.photo=await shrink(e.target.files[0]);dirty=1;draw()};
+$('#ncx').onclick=async()=>{dlg.oncancel=null;if(!dirty||await confirmBox('Discard unsaved changes?','Discard'))dlg.close();else noteForm(id,n.book)};
+f.onsubmit=async()=>{n.title=$('#nt').value;n.content=$('#nc').value;n.date=$('#nd').value||now();n.pos=$('#npos').value;n.tags=$('#ntg').value.split(',').map(t=>t.trim()).filter(Boolean);n.fav=$('#nfv').checked?1:0;n.sample=0;if(ed)Object.assign(ed,n);else S.notes.push(n);await save();V.v='read';V.id=n.id;render();toast('Note saved')};
+}
+/* actions */
+document.addEventListener('click',async e=>{const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a,id=t.dataset.id;
+if(a=='nav'){V.v=id;V.q='';V.id=null;render()}
+else if(a=='book'){V.v='book';V.id=id;V.q='';render()}
+else if(a=='note'){V.v='read';V.id=id;render()}
+else if(a=='newnote')noteForm(null,V.v=='book'?V.id:'');
+else if(a=='newbook')bookForm();else if(a=='editbook')bookForm(id);else if(a=='editnote')noteForm(id);
+else if(a=='fav'){const n=S.notes.find(x=>x.id==id);n.fav=n.fav?0:1;await save();render()}
+else if(a=='mv'){const i=S.books.findIndex(b=>b.id==id),j=i+ +t.dataset.d;if(j>=0&&j<S.books.length){[S.books[i],S.books[j]]=[S.books[j],S.books[i]];await save();toast('Book moved')}}
+else if(a=='delnote'){if(await confirmBox('Delete this note?')){const b=S.notes.find(x=>x.id==id).book;S.notes=S.notes.filter(x=>x.id!=id);await save();V.v=bookOf(b)?'book':'home';V.id=b;render();toast('Note deleted')}}
+else if(a=='delbook'){const c=notesOf(id).length;if(await confirmBox(`Delete this book? Its ${c} note(s) will move to Unsorted.`)){S.notes.forEach(n=>{if(n.book==id)n.book=''});S.books=S.books.filter(b=>b.id!=id);await save();V.v='books';render();toast('Book deleted')}}
+else if(a=='export'){const u=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'})),l=document.createElement('a');l.href=u;l.download='redleaf-backup.json';l.click();toast('Backup downloaded')}
+else if(a=='import')$('#imp').click();
+else if(a=='clear'){if(await confirmBox('Erase ALL books, notes and photos?','Erase everything')){S={books:[],notes:[],settings:S.settings};await save();render();toast('All data cleared')}}});
+document.addEventListener('change',async e=>{const t=e.target;
+if(t.dataset.s){V[t.dataset.s]=t.value;render()}
+else if(t.dataset.set){S.settings[t.dataset.set]=t.type=='checkbox'?+t.checked:t.type=='range'?+t.value:t.value;await save();render()}
+else if(t.id=='imp'){try{const d=JSON.parse(await t.files[0].text());if(!Array.isArray(d.books)||!Array.isArray(d.notes))throw 0;S={settings:S.settings,...d};await save();render();toast('Backup restored')}catch{toast('That file is not a valid Redleaf backup')}}});
+document.addEventListener('keydown',e=>{if(e.key=='Enter'&&e.target.matches('label[tabindex]'))e.target.click()});
+(async()=>{S=await load();if(!S){S=seed();await save()}S.settings.sort&&(V.sort=S.settings.sort);render()})();
+</script></body></html>
